@@ -14,6 +14,7 @@
 
 #include "raylib.h"
 #include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
+#include <stdio.h>
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
@@ -31,8 +32,9 @@ Sound fxCoin = { 0 };
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
 //----------------------------------------------------------------------------------
-static const int screenWidth = 800;
-static const int screenHeight = 450;
+static int screenWidth = 1280;
+static int screenHeight = 720;
+
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -266,6 +268,14 @@ static void UpdateDrawFrame(void)
     }
     else UpdateTransition();    // Update transition (fade-in, fade-out)
     //----------------------------------------------------------------------------------
+
+    screenWidth = EM_ASM_INT(
+        return window.innerWidth - 1;
+    );
+    screenHeight = EM_ASM_INT(
+        return window.innerHeight - 1;
+    );
+    SetWindowSize(screenWidth, screenHeight);
 
     // Draw
     //----------------------------------------------------------------------------------

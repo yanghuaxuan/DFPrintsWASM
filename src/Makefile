@@ -90,7 +90,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
             PLATFORM_OS = BSD
         endif
         ifeq ($(UNAMEOS),Darwin)
-            PLATFORM_OS = OSX
+			PLATFORM_OS = OSX
         endif
     endif
 endif
@@ -129,7 +129,7 @@ RAYLIB_RELEASE_PATH 	?= $(RAYLIB_PATH)/src
 
 ifeq ($(PLATFORM),PLATFORM_WEB)
     # Emscripten required variables
-    EMSDK_PATH         ?= C:/emsdk
+    EMSDK_PATH         ?= $${HOME}/emsdk
     EMSCRIPTEN_PATH    ?= $(EMSDK_PATH)/upstream/emscripten
     CLANG_PATH          = $(EMSDK_PATH)/upstream/bin
     PYTHON_PATH         = $(EMSDK_PATH)/python/3.9.2-1_64bit
@@ -189,7 +189,7 @@ endif
 #  -Wno-missing-braces  ignore invalid warning (GCC bug 53119)
 #  -Wno-unused-value    ignore unused return values of some functions (i.e. fread())
 #  -D_DEFAULT_SOURCE    use with -std=c99 on Linux and PLATFORM_WEB, required for timespec
-CFLAGS = -std=c99 -Wall -Wno-missing-braces -Wunused-result -D_DEFAULT_SOURCE
+CFLAGS = -std=gnu99 -Wall -Wno-missing-braces -Wunused-result -D_DEFAULT_SOURCE
 
 ifeq ($(BUILD_MODE),DEBUG)
     CFLAGS += -g -D_DEBUG
