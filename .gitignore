@@ -65,6 +65,7 @@ dkms.conf
 .vscode/
 *.wasm
 *.js
+!minshell.html
 *.html
 *.data
 .DS_Store

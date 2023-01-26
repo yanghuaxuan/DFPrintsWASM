@@ -53,6 +53,14 @@
             saveAs(blob, localFSname);
         }
     </script>
+    <script>
+        window.addEventListener("keydown", function(e) {
+            if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"]
+                .indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+}, false);
+    </script>
     </head>
     <body>
         <canvas class=emscripten id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas>

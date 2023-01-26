@@ -24,13 +24,19 @@
 **********************************************************************************************/
 
 #include "raylib.h"
+#include "rlgl.h"
 #include "screens.h"
+#if defined(PLATFORM_WEB)
+    #include <emscripten/emscripten.h>
+#endif
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+static Vector2 ballPosition = { 0 };
+static Camera2D camera = { 0 };
 
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -42,12 +48,17 @@ void InitGameplayScreen(void)
     // TODO: Initialize GAMEPLAY screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+    ballPosition = (Vector2){ GetScreenWidth()/2.0f, GetScreenHeight()/2.0f };
+    camera.target = (Vector2){ ballPosition.x, ballPosition.y };
+    camera.offset = (Vector2){ GetScreenWidth()/2.0f, GetScreenHeight()/2.0f };
+    camera.zoom = 1.0f;
 }
 
 // Gameplay Screen Update logic
 void UpdateGameplayScreen(void)
 {
     // TODO: Update GAMEPLAY screen variables here!
+    camera.target = (Vector2){ ballPosition.x, ballPosition.y };
 
     // Press enter or tap to change to ENDING screen
     if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
@@ -55,13 +66,30 @@ void UpdateGameplayScreen(void)
         finishScreen = 1;
         PlaySound(fxCoin);
     }
+
+    if (IsKeyDown(KEY_RIGHT)) ballPosition.x += 10.0f;
+    if (IsKeyDown(KEY_LEFT)) ballPosition.x -= 10.0f;
+    if (IsKeyDown(KEY_UP)) ballPosition.y -= 10.0f;
+    if (IsKeyDown(KEY_DOWN)) ballPosition.y += 10.0f;
 }
 
 // Gameplay Screen Draw logic
 void DrawGameplayScreen(void)
 {
+
     // TODO: Draw GAMEPLAY screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
+    BeginMode2D(camera);
+
+    rlPushMatrix();
+        rlTranslatef(48, 25*20, 0);
+        rlRotatef(90, 1, 0, 0);
+        DrawGrid(96, 20);
+    rlPopMatrix();
+
+    DrawCircleV(ballPosition, 20, MAROON);
+
+    EndMode2D();
+    
     Vector2 pos = { 20, 10 };
     DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
     DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
